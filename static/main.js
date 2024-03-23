@@ -2,12 +2,17 @@ const URL = "http://127.0.0.1:8000";
 const temperature = document.getElementById("temperature");
 const day = document.getElementById("day");
 const time = document.getElementById("time");
-const lightDIV = document.getElementById("lightbulb");
+const lightDIV = document.getElementById("lights");
 
-let lightbulb = {
-    name: "Light 1",
-    status: false,
-};
+const lightIconON = `<i class="bi bi-lightbulb-fill"></i>`;
+const lightIconOFF = `<i class="bi bi-lightbulb"></i>`;
+
+// let lightbulb = {
+//     name: "Light 1",
+//     status: false,
+// };
+
+let lights = {};
 
 // Set request headers
 const headers = {
@@ -35,37 +40,86 @@ function getTime() {
         .catch((err) => console.log(err));
 }
 
-function getLightbulb() {
+// function getLightbulb() {
+//     fetch(URL + "/lightbulb")
+//         .then((response) => response.json())
+//         .then((json) => updateLightbulbDIV(json))
+//         .catch((err) => console.log(err));
+// }
+
+function getLights() {
     fetch(URL + "/lightbulb")
         .then((response) => response.json())
-        .then((json) => updateLightbulbDIV(json))
+        .then((json) => {
+            lights = json;
+            let res = "";
+            for ([key, value] of Object.entries(lights)) {
+                let icon;
+                if (value["status"]) {
+                    icon = lightIconON;
+                } else {
+                    icon = lightIconOFF;
+                }
+                res += `
+                <div class="row pb-3">
+                    <div class="col">
+                        <span id="${key}-icon">${icon}</span>
+                    </div>
+                    <div class="col">
+                        <button id="${key}" class="btn btn-primary" onclick="switchLight('${key}')">${key}</button>
+                    </div>
+                </div>`;
+            }
+            lightDIV.innerHTML = res;
+        })
         .catch((err) => console.log(err));
 }
-
-function updateLightbulb() {
-    lightbulb.status = !lightbulb.status;
-    fetch(URL + "/lightbulb", {
+// TODO: fix this
+function switchLight(name) {
+    lights[name].status = !lights[name].status;
+    fetch(URL + "/lightbulb/" + name, {
         method: "PUT",
         headers: headers,
-        body: JSON.stringify(lightbulb),
+        body: JSON.stringify(lights[name]),
     })
-        .then((response) => response.json())
-        .then((json) => updateLightbulbDIV(json))
-        .catch((err) => console.log(err));
+        .then((response) => response.json)
+        .then((json) => {
+            lights[name] = json;
+            let element = document.getElementById(name + "-icon");
+            if (lights[name].status) {
+                element.innerHTML = lightIconON;
+            } else {
+                element.innerHTML = lightIconOFF;
+            }
+        })
+        .catch((err) => console.error(err));
 }
 
-function updateLightbulbDIV(json) {
-    lightbulb = json;
-    if (lightbulb.status) {
-        lightDIV.innerHTML = `<i class="bi bi-lightbulb-fill"></i>`;
-    } else {
-        lightDIV.innerHTML = `<i class="bi bi-lightbulb"></i>`;
-    }
-}
+// function updateLightbulb(name) {
+//     lights[name].status = !lights[name].status;
+//     fetch(URL + "/lightbulb", {
+//         method: "PUT",
+//         headers: headers,
+//         body: JSON.stringify(lights[name]),
+//     })
+//         .then((response) => response.json())
+//         .then((json) => updateLightbulbDIV(json))
+//         .catch((err) => console.log(err));
+// }
+
+// function updateLightbulbDIV(json) {
+//     console.log(json);
+//     lights[] = json;
+//     if (lightbulb.status) {
+//         lightDIV.innerHTML = `<i class="bi bi-lightbulb-fill"></i>`;
+//     } else {
+//         lightDIV.innerHTML = `<i class="bi bi-lightbulb"></i>`;
+//     }
+// }
 
 // END OF DEFINITIONS
 
 getTemp();
 getDay();
 getTime();
-getLightbulb();
+getLights();

@@ -7,11 +7,14 @@ import time
 
 
 class Lightbulb(BaseModel):
-    name: str | None = None
     status: bool = False
 
 
-light: Lightbulb = Lightbulb(name="Light 1")
+# light: Lightbulb = Lightbulb()
+
+lights: dict[Lightbulb] = {
+    "living": Lightbulb(), "kitchen": Lightbulb(), "bathroom": Lightbulb()
+}
 
 app = FastAPI()
 
@@ -41,16 +44,21 @@ def read_day():
     return {"day": res}
 
 
-@app.put("/lightbulb")
-async def update_lightbulb(lightbulb: Lightbulb):
-    global light
-    light = lightbulb
-    return light
+@app.put("/lightbulb/{name}")
+async def update_lightbulb(name: str, lightbulb: Lightbulb):
+    global lights
+    lights[name] = lightbulb
+    return lights[name]
+
+
+@app.get("/lightbulb/{name}")
+async def get_lightbulb(name: str):
+    return lights[name]
 
 
 @app.get("/lightbulb")
-def read_lightbulb():
-    return light
+def read_lights():
+    return lights
 
 
 if __name__ == "__main__":
