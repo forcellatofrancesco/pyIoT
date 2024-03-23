@@ -1,8 +1,17 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
+from pydantic import BaseModel
 import random
 import time
+
+
+class Lightbulb(BaseModel):
+    name: str | None = None
+    status: bool = False
+
+
+light: Lightbulb = Lightbulb(name="Light 1")
 
 app = FastAPI()
 
@@ -30,6 +39,18 @@ def read_time():
 def read_day():
     res: str = time.strftime("%d/%m/%Y")
     return {"day": res}
+
+
+@app.put("/lightbulb")
+async def update_lightbulb(lightbulb: Lightbulb):
+    global light
+    light = lightbulb
+    return light
+
+
+@app.get("/lightbulb")
+def read_lightbulb():
+    return light
 
 
 if __name__ == "__main__":
