@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
@@ -48,6 +49,8 @@ def read_day():
 async def update_lightbulb(name: str, lightbulb: Lightbulb):
     global lights
     lights[name] = lightbulb
+    # Simulate the delay for physically switching the light on or off
+    await asyncio.sleep(random.randint(300, 2000)/1000.)
     return lights[name]
 
 
