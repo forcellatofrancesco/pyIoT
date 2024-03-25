@@ -6,7 +6,7 @@ const LIGHT_ELEMENT = document.getElementById("lights");
 
 const LIGHT_ICON_ON = `<i class="bi bi-lightbulb-fill"></i>`;
 const LIGHT_ICON_OFF = `<i class="bi bi-lightbulb"></i>`;
-const LOADING_ICON = `<div class="spinner-border" role="status">
+const LOADING_ICON = `<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                             <span class="visually-hidden">Loading...</span>
                     </div>`;
 
@@ -44,19 +44,16 @@ function getLights() {
             lights = json;
             let res = "";
             for ([key, value] of Object.entries(lights)) {
-                let icon;
-                if (value.status) {
-                    icon = LIGHT_ICON_ON;
-                } else {
-                    icon = LIGHT_ICON_OFF;
-                }
+                let icon = getLightIcon(value.status);
                 res += `
-                <div class="row pb-3">
+                <div class="row pb-3 justify-content-between">
                     <div class="col">
-                        <span id="${key}-icon">${icon}</span>
+                        ${key}
                     </div>
-                    <div class="col">
-                        <button id="${key}" class="btn btn-primary" onclick="switchLight('${key}')">${key}</button>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-warning" onclick="switchLight('${key}')">
+                            <span id="${key}-icon">${icon}</span>
+                        </button>
                     </div>
                 </div>`;
             }
@@ -77,17 +74,16 @@ function switchLight(name) {
         .then((response) => response.json())
         .then((json) => {
             lights[name] = json;
-
-            if (lights[name].status) {
-                element.innerHTML = LIGHT_ICON_ON;
-            } else {
-                element.innerHTML = LIGHT_ICON_OFF;
-            }
+            element.innerHTML = getLightIcon(lights[name].status);
         })
         .catch((err) => console.error(err));
 }
 
-// END OF DEFINITIONS
+function getLightIcon(status) {
+    return status ? LIGHT_ICON_ON : LIGHT_ICON_OFF;
+}
+
+// Fetch initial data
 
 getTemp();
 getDay();

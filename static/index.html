@@ -16,34 +16,34 @@
         <h1>Hello! Interact with IoT</h1>
         <div class="card">
             <div class="card-body">
-                <div class="row pb-3">
-                    <div class="col">
+                <div class="row pb-3 justify-content-between">
+                    <div class="col-auto">
                         <span id="temperature"></span><span> °C</span>
                     </div>
-                    <div class="col">
-                        <button class="btn btn-primary" onclick="getTemp()">Update Temperature</button>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" onclick="getTemp()">
+                            <i class="bi bi-thermometer-half"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="row pb-3">
-                    <div class="col">
+                <div class="row pb-3 justify-content-between">
+                    <div class="col-auto">
                         <span id="day"></span>
                     </div>
-                    <div class="col">
-                        <button class="btn btn-primary" onclick="getDay()">Update Day</button>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" onclick="getDay()"><i class="bi bi-calendar-check"></i></button>
                     </div>
                 </div>
-                <div class="row pb-3">
-                    <div class="col">
+                <div class="row pb-3 justify-content-between">
+                    <div class="col-auto">
                         <span id="time"></span>
                     </div>
-                    <div class="col">
-                        <button class="btn btn-primary" onclick="getTime()">Update Time</button>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" onclick="getTime()"><i class="bi bi-clock"></i></button>
                     </div>
                 </div>
                 <div class="row pb-3">
-                    <div id="lights">
-
-                    </div>
+                    <div id="lights"></div>
                 </div>
 
                 <!-- <div class="row pb-3">
