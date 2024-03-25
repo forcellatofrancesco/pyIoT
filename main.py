@@ -44,14 +44,14 @@ def read_day():
     return {"day": res}
 
 
-@app.put("/lightbulb/{name}")
+@app.put("/lightbulb/{name}", response_model=Lightbulb)
 async def update_lightbulb(name: str, lightbulb: Lightbulb):
     global lights
     lights[name] = lightbulb
     return lights[name]
 
 
-@app.get("/lightbulb/{name}")
+@app.get("/lightbulb/{name}", response_model=Lightbulb)
 async def get_lightbulb(name: str):
     return lights[name]
 

@@ -74,7 +74,7 @@ function getLights() {
         })
         .catch((err) => console.log(err));
 }
-// TODO: fix this
+
 function switchLight(name) {
     lights[name].status = !lights[name].status;
     fetch(URL + "/lightbulb/" + name, {
@@ -82,7 +82,7 @@ function switchLight(name) {
         headers: headers,
         body: JSON.stringify(lights[name]),
     })
-        .then((response) => response.json)
+        .then((response) => response.json())
         .then((json) => {
             lights[name] = json;
             let element = document.getElementById(name + "-icon");
@@ -94,28 +94,6 @@ function switchLight(name) {
         })
         .catch((err) => console.error(err));
 }
-
-// function updateLightbulb(name) {
-//     lights[name].status = !lights[name].status;
-//     fetch(URL + "/lightbulb", {
-//         method: "PUT",
-//         headers: headers,
-//         body: JSON.stringify(lights[name]),
-//     })
-//         .then((response) => response.json())
-//         .then((json) => updateLightbulbDIV(json))
-//         .catch((err) => console.log(err));
-// }
-
-// function updateLightbulbDIV(json) {
-//     console.log(json);
-//     lights[] = json;
-//     if (lightbulb.status) {
-//         lightDIV.innerHTML = `<i class="bi bi-lightbulb-fill"></i>`;
-//     } else {
-//         lightDIV.innerHTML = `<i class="bi bi-lightbulb"></i>`;
-//     }
-// }
 
 // END OF DEFINITIONS
 
