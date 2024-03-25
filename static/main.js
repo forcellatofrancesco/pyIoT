@@ -6,6 +6,9 @@ const LIGHT_ELEMENT = document.getElementById("lights");
 
 const LIGHT_ICON_ON = `<i class="bi bi-lightbulb-fill"></i>`;
 const LIGHT_ICON_OFF = `<i class="bi bi-lightbulb"></i>`;
+const LOADING_ICON = `<div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                    </div>`;
 
 const headers = {
     "Content-Type": "application/json",
@@ -63,7 +66,9 @@ function getLights() {
 }
 
 function switchLight(name) {
+    let element = document.getElementById(name + "-icon");
     lights[name].status = !lights[name].status;
+    element.innerHTML = LOADING_ICON;
     fetch(URL + "/lightbulb/" + name, {
         method: "PUT",
         headers: headers,
@@ -72,7 +77,7 @@ function switchLight(name) {
         .then((response) => response.json())
         .then((json) => {
             lights[name] = json;
-            let element = document.getElementById(name + "-icon");
+
             if (lights[name].status) {
                 element.innerHTML = LIGHT_ICON_ON;
             } else {
