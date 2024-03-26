@@ -16,26 +16,26 @@ const headers = {
 
 let lights = {};
 
-function getTemp() {
-    fetch(URL + "/temperature")
-        .then((response) => response.json())
-        .then((json) => (TEMPERATURE_ELEMENT.innerHTML = json["temp"]))
-        .catch((err) => console.log(err));
-}
+// function getTemp() {
+//     fetch(URL + "/temperature")
+//         .then((response) => response.json())
+//         .then((json) => (TEMPERATURE_ELEMENT.innerHTML = json["temp"]))
+//         .catch((err) => console.log(err));
+// }
 
-function getDay() {
-    fetch(URL + "/day")
-        .then((response) => response.json())
-        .then((json) => (DAY_ELEMENT.innerHTML = json["day"]))
-        .catch((err) => console.log(err));
-}
+// function getDay() {
+//     fetch(URL + "/day")
+//         .then((response) => response.json())
+//         .then((json) => (DAY_ELEMENT.innerHTML = json["day"]))
+//         .catch((err) => console.log(err));
+// }
 
-function getTime() {
-    fetch(URL + "/time")
-        .then((response) => response.json())
-        .then((json) => (TIME_ELEMENT.innerHTML = json["time"]))
-        .catch((err) => console.log(err));
-}
+// function getTime() {
+//     fetch(URL + "/time")
+//         .then((response) => response.json())
+//         .then((json) => (TIME_ELEMENT.innerHTML = json["time"]))
+//         .catch((err) => console.log(err));
+// }
 
 function getLights() {
     fetch(URL + "/lightbulb")
@@ -85,7 +85,13 @@ function getLightIcon(status) {
 
 // Fetch initial data
 
-//getTemp();
-getDay();
-getTime();
+// getTemp();
+// getDay();
+// getTime();
 getLights();
+
+document
+    .getElementById("time")
+    .addEventListener("htmx:responseError", function (evt) {
+        console.log("Response error:", evt.detail.error);
+    });

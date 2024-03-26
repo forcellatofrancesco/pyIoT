@@ -1,6 +1,8 @@
 import asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.responses import FileResponse
 from pydantic import BaseModel
 import random
@@ -11,8 +13,6 @@ class Lightbulb(BaseModel):
     status: bool = False
 
 
-# light: Lightbulb = Lightbulb()
-
 lights: dict[Lightbulb] = {
     "living": Lightbulb(), "kitchen": Lightbulb(), "bathroom": Lightbulb()
 }
@@ -22,27 +22,37 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+templates = Jinja2Templates(directory="templates")
 
-@app.get("/")
-async def get_index():
-    return FileResponse("static/index.html")
+
+@app.get("/", response_class=HTMLResponse)
+async def get_index(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            'temperature': read_temp(),
+            'day': read_day(),
+            'time': read_time()
+        }
+    )
 
 
 @app.get("/temperature")
-def read_temp():
+async def read_temp():
     return random.randint(2000, 9000)/100.
 
 
-@app.get("/time")
-def read_time():
+@app.get("/time", response_class=PlainTextResponse)
+async def read_time() -> PlainTextResponse:
     res: str = time.strftime("%H:%M:%S", time.localtime())
     return res
 
 
 @app.get("/day")
-def read_day():
+async def read_day():
     res: str = time.strftime("%d/%m/%Y")
-    return {"day": res}
+    return res
 
 
 @app.put("/lightbulb/{name}", response_model=Lightbulb)
@@ -60,7 +70,7 @@ async def get_lightbulb(name: str):
 
 
 @app.get("/lightbulb")
-def read_lights():
+async def read_lights():
     return lights
 
 
