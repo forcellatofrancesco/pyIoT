@@ -46,9 +46,24 @@
                         </button>
                     </div>
                 </div>
-                <div class="row pb-3">
-                    <div id="lights"></div>
+
+                {%for light in lights %}
+                <div class="row pb-3 justify-content-between">
+                    <div class="col" id="{{light['name']}}">
+                        {{light["name"]}}
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-warning">
+                            {% if light["status"] %}
+                            <i class="bi bi-lightbulb-fill"></i>
+                            {% else %}
+                            <i class="bi bi-lightbulb"></i>
+                            {% endif %}
+                        </button>
+                    </div>
                 </div>
+                {% endfor %}
+
             </div>
         </div>
     </div>
@@ -58,6 +73,7 @@
     <script src="https://unpkg.com/htmx.org@1.9.11"
         integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/json-enc.js"></script>
     <script type="text/javascript" src="{{url_for('static', path='/theme.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', path='/main.js')}}"></script>
 </body>

@@ -1,5 +1,5 @@
 import asyncio
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Header
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,6 +7,7 @@ from starlette.responses import FileResponse
 from pydantic import BaseModel
 import random
 import time
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class Lightbulb(BaseModel):
@@ -14,7 +15,7 @@ class Lightbulb(BaseModel):
 
 
 lights: dict[Lightbulb] = {
-    "living": Lightbulb(), "kitchen": Lightbulb(), "bathroom": Lightbulb()
+    "living": Lightbulb(status=True), "kitchen": Lightbulb(), "bathroom": Lightbulb()
 }
 
 app = FastAPI()
@@ -31,28 +32,29 @@ async def get_index(request: Request):
         request=request,
         name="index.html",
         context={
-            'temperature': read_temp(),
-            'day': read_day(),
-            'time': read_time()
+            'temperature': (await read_temp())['data'],
+            'day': (await read_day())['data'],
+            'time': (await read_time())['data'],
+            'lights': (await read_lights())
         }
     )
 
 
 @app.get("/temperature")
 async def read_temp():
-    return random.randint(2000, 9000)/100.
-
-
-@app.get("/time", response_class=PlainTextResponse)
-async def read_time() -> PlainTextResponse:
-    res: str = time.strftime("%H:%M:%S", time.localtime())
-    return res
+    return {"data": random.randint(2000, 9000)/100.}
 
 
 @app.get("/day")
 async def read_day():
     res: str = time.strftime("%d/%m/%Y")
-    return res
+    return {"data": res}
+
+
+@app.get("/time")
+async def read_time():
+    res: str = time.strftime("%H:%M:%S", time.localtime())
+    return {"data": res}
 
 
 @app.put("/lightbulb/{name}", response_model=Lightbulb)
@@ -71,7 +73,7 @@ async def get_lightbulb(name: str):
 
 @app.get("/lightbulb")
 async def read_lights():
-    return lights
+    return list(map(lambda kv: {"name": kv[0], "status": kv[1].status}, lights.items()))
 
 
 if __name__ == "__main__":
