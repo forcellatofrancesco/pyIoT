@@ -30,13 +30,13 @@ async def get_index():
 
 @app.get("/temperature")
 def read_temp():
-    return {"temp": random.randint(2000, 9000)/100.}
+    return random.randint(2000, 9000)/100.
 
 
 @app.get("/time")
 def read_time():
     res: str = time.strftime("%H:%M:%S", time.localtime())
-    return {"time": res}
+    return res
 
 
 @app.get("/day")

@@ -18,10 +18,10 @@
             <div class="card-body">
                 <div class="row pb-3 justify-content-between">
                     <div class="col-auto">
-                        <span id="temperature"></span><span> °C</span>
+                        <span id="temperature" hx-get="/temperature" hx-trigger="load"></span><span> °C</span>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-primary" onclick="getTemp()">
+                        <button class="btn btn-primary" hx-get="/temperature" hx-target="#temperature">
                             <i class="bi bi-thermometer-half"></i>
                         </button>
                     </div>
@@ -45,21 +45,13 @@
                 <div class="row pb-3">
                     <div id="lights"></div>
                 </div>
-
-                <!-- <div class="row pb-3">
-                    <div class="col">
-                        <span id="lightbulb"></span>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-primary" onclick="updateLightbulb()">Update lightbulb</button>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
     <script type="text/javascript" src="static/theme.js"></script>
     <script type="text/javascript" src="static/main.js"></script>
 </body>

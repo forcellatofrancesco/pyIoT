@@ -85,7 +85,7 @@ function getLightIcon(status) {
 
 // Fetch initial data
 
-getTemp();
+//getTemp();
 getDay();
 getTime();
 getLights();
