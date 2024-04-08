@@ -8,6 +8,7 @@ const LIGHT_ICON_OFF = `<i class="bi bi-lightbulb"></i>`;
 const LOADING_ICON = `<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                             <span class="visually-hidden">Loading...</span>
                     </div>`;
+const SECOND = 1000;
 
 function getTemp() {
     fetch(URL + "/temperature")
@@ -47,3 +48,6 @@ function updateLight(lightbulb) {
         })
         .catch((err) => console.log(err));
 }
+
+setInterval(getTime, SECOND);
+setInterval(getTemp, SECOND * 5);
