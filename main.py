@@ -1,13 +1,11 @@
 import asyncio
-from fastapi import FastAPI, Request, Header
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import FileResponse
 from pydantic import BaseModel
 import random
 import time
-from fastapi.middleware.cors import CORSMiddleware
 
 
 class Lightbulb(BaseModel):
@@ -58,9 +56,11 @@ async def read_time():
 
 
 @app.put("/lightbulb/{name}", response_model=Lightbulb)
-async def update_lightbulb(name: str, lightbulb: Lightbulb):
+async def update_lightbulb(name: str):
     global lights
-    lights[name] = lightbulb
+    light: Lightbulb = lights[name]
+    light.status = not light.status
+    lights[name] = light
     # Simulate the delay for physically switching the light on or off
     await asyncio.sleep(random.randint(300, 2000)/1000.)
     return lights[name]
