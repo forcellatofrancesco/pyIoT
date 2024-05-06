@@ -71,7 +71,11 @@
                     <div class="col">
                         <button class="btn border w-100 h-100" id="led-{{j}}-{{i}}"
                             onclick="updateLed('{{j}}', '{{i}}')">
+                            {% if matrix[j][i] == 1%}
+                            <i class="bi bi-lightbulb-fill"></i>
+                            {% else %}
                             <i class="bi bi-lightbulb"></i>
+                            {% endif %}
                         </button>
                     </div>
                     {% endfor %}

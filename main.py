@@ -43,6 +43,7 @@ async def get_index(request: Request):
             'day': (await read_day())['data'],
             'time': (await read_time())['data'],
             'lights': (await read_lights()),
+            'matrix': matrix,
             'rows': rows,
             'cols': cols,
         }
@@ -91,7 +92,6 @@ async def read_lights():
 async def updateLed(x, y):
     x = int(x)
     y = int(y)
-    print(f"{x}, {y}")
     action = ""
     if matrix[x][y] == 0:
         matrix[x][y] = 1
@@ -99,8 +99,7 @@ async def updateLed(x, y):
     else:
         matrix[x][y] = 0
         action = "off"
-    requests.get(f"http://192.168.1.147/led/{action}?x={x}&y={y}")
-    # return "ok"
+    requests.get(f"http://192.168.135.119/led/{action}?x={x}&y={y}")
 
 
 if __name__ == "__main__":
