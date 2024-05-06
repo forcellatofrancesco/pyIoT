@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import random
 import time
+import requests
 
 
 class Lightbulb(BaseModel):
@@ -15,6 +16,14 @@ class Lightbulb(BaseModel):
 lights: dict[Lightbulb] = {
     "living": Lightbulb(status=True), "kitchen": Lightbulb(), "bathroom": Lightbulb()
 }
+
+# Define the dimensions of the matrix
+rows = 8
+cols = 12
+
+# Create the matrix filled with zeros
+matrix = [[0 for _ in range(rows)] for _ in range(cols)]
+
 
 app = FastAPI()
 
@@ -33,7 +42,9 @@ async def get_index(request: Request):
             'temperature': (await read_temp())['data'],
             'day': (await read_day())['data'],
             'time': (await read_time())['data'],
-            'lights': (await read_lights())
+            'lights': (await read_lights()),
+            'rows': rows,
+            'cols': cols,
         }
     )
 
@@ -74,6 +85,22 @@ async def get_lightbulb(name: str):
 @app.get("/lightbulb")
 async def read_lights():
     return list(map(lambda kv: {"name": kv[0], "status": kv[1].status}, lights.items()))
+
+
+@app.get("/led/{x}/{y}")
+async def updateLed(x, y):
+    x = int(x)
+    y = int(y)
+    print(f"{x}, {y}")
+    action = ""
+    if matrix[x][y] == 0:
+        matrix[x][y] = 1
+        action = "on"
+    else:
+        matrix[x][y] = 0
+        action = "off"
+    requests.get(f"http://192.168.1.147/led/{action}?x={x}&y={y}")
+    # return "ok"
 
 
 if __name__ == "__main__":

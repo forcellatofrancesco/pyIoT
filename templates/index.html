@@ -64,6 +64,19 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="col">Led Matrix</div>
+                {% for i in range(rows) %}
+                <div class="row m-1">
+                    {% for j in range(cols) %}
+                    <div class="col">
+                        <button class="btn border w-100 h-100" id="led-{{j}}-{{i}}"
+                            onclick="updateLed('{{j}}', '{{i}}')">
+                            <i class="bi bi-lightbulb"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
 
             </div>
         </div>

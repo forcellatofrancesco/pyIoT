@@ -49,5 +49,16 @@ function updateLight(lightbulb) {
         .catch((err) => console.log(err));
 }
 
+function updateLed(x, y){
+    let element = document.getElementById("led-"+x+"-"+y);
+    if(element.innerHTML===LIGHT_ICON_ON){
+        element.innerHTML = LIGHT_ICON_OFF;
+    }else{
+        element.innerHTML= LIGHT_ICON_ON;
+    }
+    console.log(x+ " "+y);
+    fetch(URL+"/led/"+x+"/"+y);
+}
+
 setInterval(getTime, SECOND);
 setInterval(getTemp, SECOND * 5);
